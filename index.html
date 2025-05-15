@@ -37,535 +37,508 @@
 
 
   <div class="program">
-    <h2>1. Implementation of the McCulloch Pitts Neuron Model for the Basic Logic Gates</h2>
+    <h2>1.Merge Sort for Random, Ordered, and Reversed Input with Time and Space Complexity</h2>
     <pre>
- import numpy as np
+ import random
+import time
 
-def mcp_neuron(inputs, weights, threshold):
-    weighted_sum = np.dot(inputs, weights)
-    return 1 if weighted_sum >= threshold else 0
-
-def logic_gates():
-    print("McCulloch Pitts Neuron for Logic Gates")
-    
-    inputs = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
-    
-    print("AND Gate")
-    and_weights = np.array([1, 1])
-    and_threshold = 2
-    for x in inputs:
-        output = mcp_neuron(x, and_weights, and_threshold)
-        print(f"Input: {x}, Output: {output}")
-    
-    print("\nOR Gate")
-    or_weights = np.array([1, 1])
-    or_threshold = 1
-    for x in inputs:
-        output = mcp_neuron(x, or_weights, or_threshold)
-        print(f"Input: {x}, Output: {output}")
-    
-    print("\nNOT Gate")
-    not_inputs = np.array([0, 1])
-    not_weights = np.array([-1])
-    not_threshold = 0
-    for x in not_inputs:
-        output = mcp_neuron(np.array([x]), not_weights, not_threshold)
-        print(f"Input: {x}, Output: {output}")
-    
-    print("\nXOR Gate")
-    for x in inputs:
-        s1 = mcp_neuron(x, np.array([1, 1]), 1)
-        s2 = mcp_neuron(x, np.array([1, 1]), 2)
-        intermediate = np.array([s1, 1-s2])
-        xor_weights = np.array([1, 1])
-        output = mcp_neuron(intermediate, xor_weights, 2)
-        print(f"Input: {x}, Output: {output}")
-
-logic_gates()
-    </pre>
-  </div>
-
-  <div class="program">
-    <h2>2. Implementation of Perceptron Learning Algorithm for Binary Classification</h2>
-    <pre>
-import numpy as np
-
-X = np.array([[2, 3], [1, 1], [4, 5], [5, 4], [1, 4], [3, 2]])
-y = np.array([1, 1, 1, 0, 0, 0])
-
-weights = np.zeros(X.shape[1])
-bias = 0
-learning_rate = 0.1
-epochs = 10
-
-for epoch in range(epochs):
-    for i in range(X.shape[0]):
-        prediction = 1 if (np.dot(X[i], weights) + bias) >= 0 else 0
-        error = y[i] - prediction
-        weights += learning_rate * error * X[i]
-        bias += learning_rate * error
-
-print("Final weights:", weights)
-print("Final bias:", bias)
-
-print("Predictions:")
-for i in range(X.shape[0]):
-    prediction = 1 if (np.dot(X[i], weights) + bias) >= 0 else 0
-    print(f"Input: {X[i]}, Predicted: {prediction}, Actual: {y[i]}")
-    </pre>
-  </div>
-
-  <div class="program">
-    <h2>3. Implementation of Different Activation Functions to Train a Simple Neural Network</h2>
-    <pre>
-import numpy as np
-
-def sigmoid(x):
-    return 1 / (1 + np.exp(-x))
-
-def sigmoid_derivative(x):
-    return x * (1 - x)
-
-def relu(x):
-    return np.maximum(0, x)
-
-def relu_derivative(x):
-    return np.where(x > 0, 1, 0)
-
-def tanh(x):
-    return np.tanh(x)
-
-def tanh_derivative(x):
-    return 1 - x**2
-
-X = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
-y = np.array([[0], [1], [1], [0]])
-
-np.random.seed(1)
-weights_input_hidden = np.random.uniform(size=(2, 2))
-weights_hidden_output = np.random.uniform(size=(2, 1))
-bias_hidden = np.zeros((1, 2))
-bias_output = np.zeros((1, 1))
-
-learning_rate = 0.1
-epochs = 1000
-
-activation_functions = [("Sigmoid", sigmoid, sigmoid_derivative),
-                       ("ReLU", relu, relu_derivative),
-                       ("Tanh", tanh, tanh_derivative)]
-
-for name, activation, derivative in activation_functions:
-    print(f"\nTraining with {name} activation function")
-    
-    w_ih = weights_input_hidden.copy()
-    w_ho = weights_hidden_output.copy()
-    b_h = bias_hidden.copy()
-    b_o = bias_output.copy()
-    
-    for epoch in range(epochs):
-        hidden_input = np.dot(X, w_ih) + b_h
-        if name == "Tanh":
-            hidden_output = activation(hidden_input)
+def merge(arr, left, mid, right):
+    left_arr = arr[left:mid + 1]
+    right_arr = arr[mid + 1:right + 1]
+    i = j = 0
+    k = left
+    while i < len(left_arr) and j < len(right_arr):
+        if left_arr[i] <= right_arr[j]:
+            arr[k] = left_arr[i]
+            i += 1
         else:
-            hidden_output = activation(hidden_input)
-        
-        output_input = np.dot(hidden_output, w_ho) + b_o
-        output = sigmoid(output_input)
-        
-        error = y - output
-        output_delta = error * sigmoid_derivative(output)
-        
-        hidden_error = np.dot(output_delta, w_ho.T)
-        hidden_delta = hidden_error * derivative(hidden_output)
-        
-        w_ho += learning_rate * np.dot(hidden_output.T, output_delta)
-        w_ih += learning_rate * np.dot(X.T, hidden_delta)
-        b_o += learning_rate * np.sum(output_delta, axis=0, keepdims=True)
-        b_h += learning_rate * np.sum(hidden_delta, axis=0, keepdims=True)
+            arr[k] = right_arr[j]
+            j += 1
+        k += 1
+    while i < len(left_arr):
+        arr[k] = left_arr[i]
+        i += 1
+        k += 1
+    while j < len(right_arr):
+        arr[k] = right_arr[j]
+        j += 1
+        k += 1
+
+def merge_sort(arr, left, right):
+    if left < right:
+        mid = (left + right) // 2
+        merge_sort(arr, left, mid)
+        merge_sort(arr, mid + 1, right)
+        merge(arr, left, mid, right)
+
+def test_merge_sort():
+    n = 1000
+    random_input = [random.randint(1, 1000) for _ in range(n)]
+    ordered_input = list(range(1, n + 1))
+    reversed_input = list(range(n, 0, -1))
+    inputs = {"Random": random_input.copy(), "Ordered": ordered_input.copy(), "Reversed": reversed_input.copy()}
+    for input_type, arr in inputs.items():
+        start_time = time.time()
+        merge_sort(arr, 0, len(arr) - 1)
+        end_time = time.time()
+        print(f"{input_type} Input: First 10 elements after sorting: {arr[:10]}")
+        print(f"Time taken for {input_type} input: {(end_time - start_time):.6f} seconds")
+        print(f"Sorted correctly: {arr == sorted(arr)}\n")
+
+if __name__ == "__main__":
+    test_merge_sort()
+
+# Time Complexity: O(n log n)
+# Space Complexity: O(n)
+    </pre>
+  </div>
+
+  <div class="program">
+    <h2>2.Tower of Hanoi</h2>
+    <pre>
+def tower_of_hanoi(n, source, auxiliary, destination):
+    if n == 1:
+        print(f"Move disk 1 from {source} to {destination}")
+        return
+    tower_of_hanoi(n - 1, source, destination, auxiliary)
+    print(f"Move disk {n} from {source} to {destination}")
+    tower_of_hanoi(n - 1, auxiliary, source, destination)
+
+if __name__ == "__main__":
+    n = 3
+    print(f"Tower of Hanoi steps for {n} disks:")
+    tower_of_hanoi(n, 'A', 'B', 'C')
+
+# Time Complexity: O(2^n)
+# Space Complexity: O(n)
+    </pre>
+  </div>
+
+  <div class="program">
+    <h2>3.Quick Sort</h2>
+    <pre>
+import random
+import time
+
+def quick_sort(arr, low, high):
+    if low < high:
+        pi = partition(arr, low, high)
+        quick_sort(arr, low, pi - 1)
+        quick_sort(arr, pi + 1, high)
+
+def partition(arr, low, high):
+    pivot = arr[high]
+    i = low - 1
+    for j in range(low, high):
+        if arr[j] <= pivot:
+            i += 1
+            arr[i], arr[j] = arr[j], arr[i]
+    arr[i + 1], arr[high] = arr[high], arr[i + 1]
+    return i + 1
+
+def test_quick_sort():
+    n = 1000
+    random_input = [random.randint(1, 1000) for _ in range(n)]
+    ordered_input = list(range(1, n + 1))
+    reversed_input = list(range(n, 0, -1))
+    inputs = {"Random": random_input.copy(), "Ordered": ordered_input.copy(), "Reversed": reversed_input.copy()}
+    for input_type, arr in inputs.items():
+        start_time = time.time()
+        quick_sort(arr, 0, len(arr) - 1)
+        end_time = time.time()
+        print(f"{input_type} Input: First 10 elements after sorting: {arr[:10]}")
+        print(f"Time taken for {input_type} input: {(end_time - start_time):.6f} seconds")
+        print(f"Sorted correctly: {arr == sorted(arr)}\n")
+
+if __name__ == "__main__":
+    test_quick_sort()
+
+# Time Complexity: O(n log n) average, O(n^2) worst case
+# Space Complexity: O(log n) average, O(n) worst case
+    </pre>
+  </div>
+
+  <div class="program">
+    <h2>4.Travelling Salesman Problem using Dynamic Programming</h2>
+    <pre>
+def tsp_dp(graph, n):
+    dp = [[float('inf')] * n for _ in range(1 << n)]
+    dp[1][0] = 0
+    for mask in range(1 << n):
+        for u in range(n):
+            if mask & (1 << u):
+                for v in range(n):
+                    if not (mask & (1 << v)):
+                        dp[mask | (1 << v)][v] = min(dp[mask | (1 << v)][v], dp[mask][u] + graph[u][v])
+    min_cost = float('inf')
+    final_mask = (1 << n) - 1
+    for u in range(1, n):
+        min_cost = min(min_cost, dp[final_mask][u] + graph[u][0])
+    return min_cost
+
+if __name__ == "__main__":
+    graph = [[0, 10, 15, 20], [10, 0, 35, 25], [15, 35, 0, 30], [20, 25, 30, 0]]
+    n = len(graph)
+    print(f"Minimum TSP cost: {tsp_dp(graph, n)}")
+
+    </pre>
+  </div>
+
+  <div class="program">
+    <h2>5.Insertion Sort </h2>
+    <pre>
+import random
+import time
+
+def insertion_sort(arr):
+    for i in range(1, len(arr)):
+        key = arr[i]
+        j = i - 1
+        while j >= 0 and arr[j] > key:
+            arr[j + 1] = arr[j]
+            j -= 1
+        arr[j + 1] = key
+
+def test_insertion_sort():
+    n = 1000
+    random_input = [random.randint(1, 1000) for _ in range(n)]
+    ordered_input = list(range(1, n + 1))
+    reversed_input = list(range(n, 0, -1))
+    inputs = {"Random": random_input.copy(), "Ordered": ordered_input.copy(), "Reversed": reversed_input.copy()}
+    for input_type, arr in inputs.items():
+        start_time = time.time()
+        insertion_sort(arr)
+        end_time = time.time()
+        print(f"{input_type} Input: First 10 elements after sorting: {arr[:10]}")
+        print(f"Time taken for {input_type} input: {(end_time - start_time):.6f} seconds")
+        print(f"Sorted correctly: {arr == sorted(arr)}\n")
+
+if __name__ == "__main__":
+    test_insertion_sort()
+
+# Time Complexity: O(n) best case, O(n^2) average and worst case
+# Space Complexity: O(1)
+    </pre>
+  </div>
+
+  <div class="program">
+    <h2>6. Knapsack Problem using Dynamic Programming</h2>
+    <pre>
+def knapsack_dp(values, weights, W, n):
+    dp = [[0 for _ in range(W + 1)] for _ in range(n + 1)]
+    for i in range(1, n + 1):
+        for w in range(W + 1):
+            if weights[i-1] <= w:
+                dp[i][w] = max(values[i-1] + dp[i-1][w - weights[i-1]], dp[i-1][w])
+            else:
+                dp[i][w] = dp[i-1][w]
+    return dp[n][W]
+
+if __name__ == "__main__":
+    values = [60, 100, 120]
+    weights = [10, 20, 30]
+    W = 50
+    n = len(values)
+    print(f"Maximum knapsack value: {knapsack_dp(values, weights, W, n)}")
+
+# Time Complexity: O(n * W)
+# Space Complexity: O(n * W)
+    </pre>
+  </div>
+
+  <div class="program">
+    <h2>7.Binary search</h2>
+    <pre>
+def binary_search(arr, target, left, right):
+    if left > right:
+        return -1
+    mid = (left + right) // 2
+    if arr[mid] == target:
+        return mid
+    elif arr[mid] > target:
+        return binary_search(arr, target, left, mid - 1)
+    else:
+        return binary_search(arr, target, mid + 1, right)
+
+if __name__ == "__main__":
+    arr = [2, 3, 4, 10, 40, 50, 60, 70]
+    target = 10
+    result = binary_search(arr, target, 0, len(arr) - 1)
+    print(f"Element {target} found at index: {result}")
+
+# Time Complexity: O(log n)
+# Space Complexity: O(log n)
+    </pre>
+  </div>
+
+  <div class="program">
+    <h2>8.Floyd's Algorithm</h2>
+    <pre>
+def floyd_algorithm(graph, n):
+    dist = [row[:] for row in graph]
+    for k in range(n):
+        for i in range(n):
+            for j in range(n):
+                if dist[i][k] != float('inf') and dist[k][j] != float('inf'):
+                    dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])
+    return dist
+
+if __name__ == "__main__":
+    INF = float('inf')
+    graph = [[0, 5, INF, 10], [INF, 0, 3, INF], [INF, INF, 0, 1], [INF, INF, INF, 0]]
+    n = len(graph)
+    result = floyd_algorithm(graph, n)
+    print("All pairs shortest paths:")
+    for row in result:
+        print(row)
+
+# Time Complexity: O(n^3)
+# Space Complexity: O(n^2)
+    </pre>
+  </div>
+
+  <div class="program">
+    <h2>9.Brute Force Algorithm (Example: String Matching)</h2>
+    <pre>
+def brute_force_string(text, pattern):
+    n = len(text)
+    m = len(pattern)
+    for i in range(n - m + 1):
+        j = 0
+        while j < m and text[i + j] == pattern[j]:
+            j += 1
+        if j == m:
+            return i
+    return -1
+
+if __name__ == "__main__":
+    text = "AABAACAADAABAAABAA"
+    pattern = "AABA"
+    result = brute_force_string(text, pattern)
+    print(f"Pattern found at index: {result}")
+
+# Time Complexity: O(n * m)
+# Space Complexity: O(1)
+    </pre>
+  </div>
+
+  <div class="program">
+    <h2>10.Dijkstra's Algorithm</h2>
+    <pre>
+def dijkstra(graph, n, src):
+    dist = [float('inf')] * n
+    dist[src] = 0
+    visited = [False] * n
+    for _ in range(n):
+        u = min((d, i) for i, d in enumerate(dist) if not visited[i])[1]
+        visited[u] = True
+        for v in range(n):
+            if not visited[v] and graph[u][v] != 0 and dist[u] + graph[u][v] < dist[v]:
+                dist[v] = dist[u] + graph[u][v]
+    return dist
+
+if __name__ == "__main__":
+    graph = [[0, 4, 0, 0, 8], [4, 0, 8, 0, 0], [0, 8, 0, 7, 0], [0, 0, 7, 0, 9], [8, 0, 0, 9, 0]]
+    n = len(graph)
+    result = dijkstra(graph, n, 0)
+    print(f"Shortest paths from vertex 0: {result}")
+
+# Time Complexity: O(n^2)
+# Space Complexity: O(n)
+    </pre>
+  </div>
+
+  <div class="program">
+    <h2>11. Prim's Algorithm for Minimum Spanning Tree</h2>
+    <pre>
+def prim(graph, n):
+    key = [float('inf')] * n
+    key[0] = 0
+    mst_set = [False] * n
+    parent = [-1] * n
+    for _ in range(n):
+        u = min((k, i) for i, k in enumerate(key) if not mst_set[i])[1]
+        mst_set[u] = True
+        for v in range(n):
+            if graph[u][v] != 0 and not mst_set[v] and graph[u][v] < key[v]:
+                key[v] = graph[u][v]
+                parent[v] = u
+    return parent
+
+if __name__ == "__main__":
+    graph = [[0, 2, 0, 6, 0], [2, 0, 3, 8, 5], [0, 3, 0, 0, 7], [6, 8, 0, 0, 9], [0, 5, 7, 9, 0]]
+    n = len(graph)
+    result = prim(graph, n)
+    print("Edges in MST (parent array):", result)
+
+# Time Complexity: O(n^2)
+# Space Complexity: O(n)
+    </pre>
+  </div>
+
+  <div class="program">
+    <h2>12.Kruskal's Algorithm for Minimum Cost Spanning Tree</h2>
+    <pre>
+def find(parent, i):
+    if parent[i] == i:
+        return i
+    return find(parent, parent[i])
+
+def union(parent, rank, x, y):
+    px = find(parent, x)
+    py = find(parent, y)
+    if rank[px] < rank[py]:
+        parent[px] = py
+    elif rank[px] > rank[py]:
+        parent[py] = px
+    else:
+        parent[py] = px
+        rank[px] += 1
+
+def kruskal(graph, n):
+    edges = []
+    for i in range(n):
+        for j in range(i + 1, n):
+            if graph[i][j] != 0:
+                edges.append((graph[i][j], i, j))
+    edges.sort()
+    parent = list(range(n))
+    rank = [0] * n
+    mst = []
+    for w, u, v in edges:
+        if find(parent, u) != find(parent, v):
+            union(parent, rank, u, v)
+            mst.append((u, v, w))
+    return mst
+
+if __name__ == "__main__":
+    graph = [[0, 2, 0, 6, 0], [2, 0, 3, 8, 5], [0, 3, 0, 0, 7], [6, 8, 0, 0, 9], [0, 5, 7, 9, 0]]
+    n = len(graph)
+    result = kruskal(graph, n)
+    print("Edges in MST (u, v, weight):", result)
+
+# Time Complexity: O(E log E)
+# Space Complexity: O(V + E)
+    </pre>
+  </div>
+
+<div class="program">
+  <h2>13.Backtracking Algorithm (Example: N-Queens Problem)</h2>
+  <pre>
+    def is_safe(board, row, col, n):
+    for i in range(col):
+        if board[row][i] == 1:
+            return False
+    for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
+        if board[i][j] == 1:
+            return False
+    for i, j in zip(range(row, n), range(col, -1, -1)):
+        if board[i][j] == 1:
+            return False
+    return True
+
+def solve_n_queens(board, col, n):
+    if col >= n:
+        return True
+    for i in range(n):
+        if is_safe(board, i, col, n):
+            board[i][col] = 1
+            if solve_n_queens(board, col + 1, n):
+                return True
+            board[i][col] = 0
+    return False
+
+if __name__ == "__main__":
+    n = 4
+    board = [[0 for _ in range(n)] for _ in range(n)]
+    if solve_n_queens(board, 0, n):
+        for row in board:
+            print(row)
+    else:
+        print("No solution exists")
+
+# Time Complexity: O(n!)
+# Space Complexity: O(n^2)
+  </pre>
+</div>
+      <div class="program">
+        <h2>14.Compare Two Sorting Algorithms (Merge Sort and Quick Sort)</h2>
+<pre>import random
+import time
+
+def merge(arr, left, mid, right):
+    left_arr = arr[left:mid + 1]
+    right_arr = arr[mid + 1:right + 1]
+    i = j = 0
+    k = left
+    while i < len(left_arr) and j < len(right_arr):
+        if left_arr[i] <= right_arr[j]:
+            arr[k] = left_arr[i]
+            i += 1
+        else:
+            arr[k] = right_arr[j]
+            j += 1
+        k += 1
+    while i < len(left_arr):
+        arr[k] = left_arr[i]
+        i += 1
+        k += 1
+    while j < len(right_arr):
+        arr[k] = right_arr[j]
+        j += 1
+        k += 1
+
+def merge_sort(arr, left, right):
+    if left < right:
+        mid = (left + right) // 2
+        merge_sort(arr, left, mid)
+        merge_sort(arr, mid + 1, right)
+        merge(arr, left, mid, right)
+
+def quick_sort(arr, low, high):
+    if low < high:
+        pi = partition(arr, low, high)
+        quick_sort(arr, low, pi - 1)
+        quick_sort(arr, pi + 1, high)
+
+def partition(arr, low, high):
+    pivot = arr[high]
+    i = low - 1
+    for j in range(low, high):
+        if arr[j] <= pivot:
+            i += 1
+            arr[i], arr[j] = arr[j], arr[i]
+    arr[i + 1], arr[high] = arr[high], arr[i + 1]
+    return i + 1
+
+def compare_sorts():
+    n = 1000
+    random_input = [random.randint(1, 1000) for _ in range(n)]
+    merge_arr = random_input.copy()
+    quick_arr = random_input.copy()
     
-    print("Predictions:")
-    hidden_input = np.dot(X, w_ih) + b_h
-    hidden_output = activation(hidden_input) if name != "Tanh" else activation(hidden_input)
-    output = sigmoid(np.dot(hidden_output, w_ho) + b_o)
-    for i in range(len(X)):
-        print(f"Input: {X[i]}, Predicted: {output[i][0]:.4f}, Actual: {y[i][0]}")
-    </pre>
-  </div>
-
-  <div class="program">
-    <h2>4. Implementation of MLP (Multilayer Perceptron) for Binary Classification (Spam Detection)</h2>
-    <pre>
-from sklearn.neural_network import MLPClassifier
-from sklearn.preprocessing import StandardScaler
-import numpy as np
-
-X = np.array([[0, 1, 2], [1, 2, 3], [2, 0, 1], [3, 1, 0], [1, 1, 1], [0, 0, 0]])
-y = np.array([0, 1, 1, 0, 1, 0])
-
-scaler = StandardScaler()
-X_scaled = scaler.fit_transform(X)
-
-mlp = MLPClassifier(hidden_layer_sizes=(5,), activation='relu', max_iter=1000, random_state=1)
-mlp.fit(X_scaled, y)
-
-predictions = mlp.predict(X_scaled)
-
-print("MLP for Spam Detection")
-print("Features (scaled):", X_scaled)
-print("Actual labels:", y)
-print("Predicted labels:", predictions)
-
-accuracy = np.mean(predictions == y)
-print(f"Accuracy: {accuracy:.4f}")
-    </pre>
-  </div>
-
-  <div class="program">
-    <h2>5. Implementation of Feedforward Networks for Handwritten Digit Recognition</h2>
-    <pre>
-import tensorflow as tf
-from tensorflow.keras import layers, models
-import numpy as np
-
-(x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
-
-x_train = x_train.reshape((60000, 28*28)).astype('float32') / 255
-x_test = x_test.reshape((10000, 28*28)).astype('float32') / 255
-
-y_train = tf.keras.utils.to_categorical(y_train, 10)
-y_test = tf.keras.utils.to_categorical(y_test, 10)
-
-model = models.Sequential()
-model.add(layers.Dense(128, activation='relu', input_shape=(28*28,)))
-model.add(layers.Dense(64, activation='relu'))
-model.add(layers.Dense(10, activation='softmax'))
-
-model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-
-model.fit(x_train, y_train, epochs=5, batch_size=32, verbose=1)
-
-test_loss, test_accuracy = model.evaluate(x_test, y_test, verbose=0)
-print(f"Test accuracy: {test_accuracy:.4f}")
-
-predictions = model.predict(x_test[:5])
-print("Predictions for first 5 test images:")
-for i in range(5):
-    predicted_label = np.argmax(predictions[i])
-    actual_label = np.argmax(y_test[i])
-    print(f"Sample {i+1}: Predicted: {predicted_label}, Actual: {actual_label}")
-    </pre>
-  </div>
-
-  <div class="program">
-    <h2>6. Implement a CNN to Classify Faces as Male or Female Based on Facial Features</h2>
-    <pre>
-import tensorflow as tf
-from tensorflow.keras import layers, models
-import numpy as np
-
-np.random.seed(1)
-x_train = np.random.rand(100, 64, 64, 1)
-y_train = np.random.randint(0, 2, (100,))
-x_test = np.random.rand(20, 64, 64, 1)
-y_test = np.random.randint(0, 2, (20,))
-
-model = models.Sequential()
-model.add(layers.Conv2D(32, (3, 3), activation='relu', input_shape=(64, 64, 1)))
-model.add(layers.MaxPooling2D((2, 2)))
-model.add(layers.Conv2D(64, (3, 3), activation='relu'))
-model.add(layers.MaxPooling2D((2, 2)))
-model.add(layers.Flatten())
-model.add(layers.Dense(64, activation='relu'))
-model.add(layers.Dense(1, activation='sigmoid'))
-
-model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
-
-model.fit(x_train, y_train, epochs=3, batch_size=16, verbose=1)
-
-test_loss, test_accuracy = model.evaluate(x_test, y_test, verbose=0)
-print(f"Test accuracy: {test_accuracy:.4f}")
-
-predictions = model.predict(x_test[:5])
-print("Predictions for first 5 test images:")
-for i in range(5):
-    predicted_label = 1 if predictions[i] >= 0.5 else 0
-    print(f"Sample {i+1}: Predicted: {predicted_label}, Actual: {y_test[i]}")
-    </pre>
-  </div>
-
-  <div class="program">
-    <h2>7. Implement a CNN to Classify Chest X-Ray Images as Pneumonia or Normal</h2>
-    <pre>
-import tensorflow as tf
-from tensorflow.keras import layers, models
-import numpy as np
-
-np.random.seed(1)
-x_train = np.random.rand(100, 128, 128, 1)
-y_train = np.random.randint(0, 2, (100,))
-x_test = np.random.rand(20, 128, 128, 1)
-y_test = np.random.randint(0, 2, (20,))
-
-model = models.Sequential()
-model.add(layers.Conv2D(32, (3, 3), activation='relu', input_shape=(128, 128, 1)))
-model.add(layers.MaxPooling2D((2, 2)))
-model.add(layers.Conv2D(64, (3, 3), activation='relu'))
-model.add(layers.MaxPooling2D((2, 2)))
-model.add(layers.Conv2D(128, (3, 3), activation='relu'))
-model.add(layers.MaxPooling2D((2, 2)))
-model.add(layers.Flatten())
-model.add(layers.Dense(128, activation='relu'))
-model.add(layers.Dense(1, activation='sigmoid'))
-
-model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
-
-model.fit(x_train, y_train, epochs=3, batch_size=16, verbose=1)
-
-test_loss, test_accuracy = model.evaluate(x_test, y_test, verbose=0)
-print(f"Test accuracy: {test_accuracy:.4f}")
-
-predictions = model.predict(x_test[:5])
-print("Predictions for first 5 test images:")
-for i in range(5):
-    predicted_label = 1 if predictions[i] >= 0.5 else 0
-    print(f"Sample {i+1}: Predicted: {predicted_label}, Actual: {y_test[i]}")
-    </pre>
-  </div>
-
-  <div class="program">
-    <h2>8. Fine-Tune a Pretrained BERT Model for Sentiment Analysis on a Dataset Like IMDb for Movie Reviews to Classify Them as Positive or Negative</h2>
-    <pre>
-from transformers import BertTokenizer, BertForSequenceClassification, Trainer, TrainingArguments
-import torch
-import numpy as np
-
-reviews = ["I loved this movie it was great", "This film was terrible and boring", "Amazing story and acting", "I hated it so much", "Really good experience"]
-labels = [1, 0, 1, 0, 1]
-
-tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-model = BertForSequenceClassification.from_pretrained('bert-base-uncased', num_labels=2)
-
-inputs = tokenizer(reviews, padding=True, truncation=True, return_tensors="pt", max_length=128)
-inputs['labels'] = torch.tensor(labels)
-
-class IMDbDataset(torch.utils.data.Dataset):
-    def __init__(self, encodings):
-        self.encodings = encodings
-    def __getitem__(self, idx):
-        item = {key: val[idx] for key, val in self.encodings.items()}
-        return item
-    def __len__(self):
-        return len(self.encodings['labels'])
-
-dataset = IMDbDataset(inputs)
-
-training_args = TrainingArguments(
-    output_dir='./results',
-    num_train_epochs=2,
-    per_device_train_batch_size=2,
-    logging_steps=1,
-    logging_dir='./logs',
-)
-
-trainer = Trainer(
-    model=model,
-    args=training_args,
-    train_dataset=dataset,
-)
-
-trainer.train()
-
-test_reviews = ["This movie is fantastic", "Awful experience"]
-test_inputs = tokenizer(test_reviews, padding=True, truncation=True, return_tensors="pt", max_length=128)
-outputs = model(**test_inputs)
-predictions = torch.argmax(outputs.logits, dim=1)
-print("Predictions for test reviews:")
-for i, review in enumerate(test_reviews):
-    print(f"Review: {review}, Predicted: {'Positive' if predictions[i] == 1 else 'Negative'}")
-    </pre>
-  </div>
-
-  <div class="program">
-    <h2>9. Utilize a Pretrained MobileNet Model to Classify Images from the Kaggle Cats vs Dogs Dataset into 'Cat' or 'Dog'</h2>
-    <pre>
-import tensorflow as tf
-from tensorflow.keras.applications import MobileNet
-from tensorflow.keras import layers, models
-import numpy as np
-
-np.random.seed(1)
-x_train = np.random.rand(100, 224, 224, 3)
-y_train = np.random.randint(0, 2, (100,))
-x_test = np.random.rand(20, 224, 224, 3)
-y_test = np.random.randint(0, 2, (20,))
-
-base_model = MobileNet(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
-base_model.trainable = False
-
-model = models.Sequential()
-model.add(base_model)
-model.add(layers.GlobalAveragePooling2D())
-model.add(layers.Dense(128, activation='relu'))
-model.add(layers.Dense(1, activation='sigmoid'))
-
-model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
-
-model.fit(x_train, y_train, epochs=3, batch_size=16, verbose=1)
-
-test_loss, test_accuracy = model.evaluate(x_test, y_test, verbose=0)
-print(f"Test accuracy: {test_accuracy:.4f}")
-
-predictions = model.predict(x_test[:5])
-print("Predictions for first 5 test images:")
-for i in range(5):
-    predicted_label = 'Dog' if predictions[i] >= 0.5 else 'Cat'
-    actual_label = 'Dog' if y_test[i] == 1 else 'Cat'
-    print(f"Sample {i+1}: Predicted: {predicted_label}, Actual: {actual_label}")
-    </pre>
-  </div>
-
-  <div class="program">
-    <h2>10. Speech Recognition with LSTM Networks</h2>
-    <pre>
-import tensorflow as tf
-from tensorflow.keras import layers, models
-import numpy as np
-
-np.random.seed(1)
-x_train = np.random.rand(100, 10, 13)
-y_train = np.random.randint(0, 2, (100,))
-x_test = np.random.rand(20, 10, 13)
-y_test = np.random.randint(0, 2, (20,))
-
-model = models.Sequential()
-model.add(layers.LSTM(128, input_shape=(10, 13), return_sequences=False))
-model.add(layers.Dense(64, activation='relu'))
-model.add(layers.Dense(1, activation='sigmoid'))
-
-model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
-
-model.fit(x_train, y_train, epochs=3, batch_size=16, verbose=1)
-
-test_loss, test_accuracy = model.evaluate(x_test, y_test, verbose=0)
-print(f"Test accuracy: {test_accuracy:.4f}")
-
-predictions = model.predict(x_test[:5])
-print("Predictions for first 5 test samples:")
-for i in range(5):
-    predicted_label = 1 if predictions[i] >= 0.5 else 0
-    print(f"Sample {i+1}: Predicted: {predicted_label}, Actual: {y_test[i]}")
-    </pre>
-  </div>
-
-  <div class="program">
-    <h2>11. Generative Adversarial Network for Image Generation</h2>
-    <pre>
-import tensorflow as tf
-from tensorflow.keras import layers, models
-import numpy as np
-
-def build_generator():
-    model = models.Sequential()
-    model.add(layers.Dense(128, activation='relu', input_dim=100))
-    model.add(layers.Dense(784, activation='sigmoid'))
-    model.add(layers.Reshape((28, 28, 1)))
-    return model
-
-def build_discriminator():
-    model = models.Sequential()
-    model.add(layers.Flatten(input_shape=(28, 28, 1)))
-    model.add(layers.Dense(128, activation='relu'))
-    model.add(layers.Dense(1, activation='sigmoid'))
-    return model
-
-generator = build_generator()
-discriminator = build_discriminator()
-discriminator.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
-
-discriminator.trainable = False
-gan_input = layers.Input(shape=(100,))
-generated_image = generator(gan_input)
-gan_output = discriminator(generated_image)
-gan = models.Model(gan_input, gan_output)
-gan.compile(optimizer='adam', loss='binary_crossentropy')
-
-np.random.seed(1)
-x_train = np.random.rand(1000, 28, 28, 1)
-
-epochs = 5
-batch_size = 32
-
-for epoch in range(epochs):
-    noise = np.random.normal(0, 1, (batch_size, 100))
-    generated_images = generator.predict(noise, verbose=0)
+    start_time = time.time()
+    merge_sort(merge_arr, 0, len(merge_arr) - 1)
+    merge_time = time.time() - start_time
+    print(f"Merge Sort Time: {merge_time:.6f} seconds")
+    print(f"Merge Sort Correct: {merge_arr == sorted(merge_arr)}")
     
-    real_images = x_train[np.random.randint(0, x_train.shape[0], batch_size)]
-    labels_real = np.ones((batch_size, 1))
-    labels_fake = np.zeros((batch_size, 1))
+    start_time = time.time()
+    quick_sort(quick_arr, 0, len(quick_arr) - 1)
+    quick_time = time.time() - start_time
+    print(f"Quick Sort Time: {quick_time:.6f} seconds")
+    print(f"Quick Sort Correct: {quick_arr == sorted(quick_arr)}")
     
-    d_loss_real = discriminator.train_on_batch(real_images, labels_real)
-    d_loss_fake = discriminator.train_on_batch(generated_images, labels_fake)
-    d_loss = 0.5 * np.add(d_loss_real, d_loss_fake)
-    
-    noise = np.random.normal(0, 1, (batch_size, 100))
-    labels_gan = np.ones((batch_size, 1))
-    g_loss = gan.train_on_batch(noise, labels_gan)
-    
-    print(f"Epoch {epoch+1}/{epochs} - D Loss: {d_loss[0]:.4f}, D Accuracy: {d_loss[1]:.4f}, G Loss: {g_loss:.4f}")
-    </pre>
-  </div>
+    print("Comparison: Merge Sort is stable with O(n log n) time always, but uses O(n) space.")
+    print("Quick Sort is in-place with O(n log n) average time, but O(n^2) worst case.")
 
-  <div class="program">
-    <h2>12. Variational Autoencoder for Generating Images</h2>
-    <pre>
-import tensorflow as tf
-from tensorflow.keras import layers, models
-import numpy as np
+if __name__ == "__main__":
+    compare_sorts()
 
-latent_dim = 2
-
-encoder_inputs = layers.Input(shape=(28, 28, 1))
-x = layers.Conv2D(32, 3, activation='relu', strides=2, padding='same')(encoder_inputs)
-x = layers.Conv2D(64, 3, activation='relu', strides=2, padding='same')(x)
-x = layers.Flatten()(x)
-x = layers.Dense(16, activation='relu')(x)
-z_mean = layers.Dense(latent_dim)(x)
-z_log_var = layers.Dense(latent_dim)(x)
-
-def sampling(args):
-    z_mean, z_log_var = args
-    epsilon = tf.keras.backend.random_normal(shape=(tf.shape(z_mean)[0], latent_dim))
-    return z_mean + tf.exp(0.5 * z_log_var) * epsilon
-
-z = layers.Lambda(sampling)([z_mean, z_log_var])
-encoder = models.Model(encoder_inputs, [z_mean, z_log_var, z], name='encoder')
-
-decoder_inputs = layers.Input(shape=(latent_dim,))
-x = layers.Dense(7*7*64, activation='relu')(decoder_inputs)
-x = layers.Reshape((7, 7, 64))(x)
-x = layers.Conv2DTranspose(64, 3, activation='relu', strides=2, padding='same')(x)
-x = layers.Conv2DTranspose(32, 3, activation='relu', strides=2, padding='same')(x)
-decoder_outputs = layers.Conv2DTranspose(1, 3, activation='sigmoid', padding='same')(x)
-decoder = models.Model(decoder_inputs, decoder_outputs, name='decoder')
-
-vae_outputs = decoder(encoder(encoder_inputs)[2])
-vae = models.Model(encoder_inputs, vae_outputs, name='vae')
-
-reconstruction_loss = tf.keras.losses.binary_crossentropy(tf.keras.backend.flatten(encoder_inputs), tf.keras.backend.flatten(vae_outputs))
-reconstruction_loss *= 28 * 28
-kl_loss = 1 + z_log_var - tf.square(z_mean) - tf.exp(z_log_var)
-kl_loss = tf.reduce_mean(kl_loss, axis=-1)
-kl_loss *= -0.5
-vae_loss = tf.reduce_mean(reconstruction_loss + kl_loss)
-vae.add_loss(vae_loss)
-vae.compile(optimizer='adam')
-
-np.random.seed(1)
-x_train = np.random.rand(1000, 28, 28, 1)
-
-vae.fit(x_train, epochs=5, batch_size=32, verbose=1)
-    </pre>
-  </div>
-
-</body>
+# Merge Sort Time Complexity: O(n log n)
+# Merge Sort Space Complexity: O(n)
+# Quick Sort Time Complexity: O(n log n) average, O(n^2) worst case
+# Quick Sort Space Complexity: O(log n) average</pre>
+      </div>
+      </body>
 </html>
