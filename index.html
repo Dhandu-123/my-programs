@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title> Programs</title>
+  <title>Programs</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -29,17 +29,30 @@
       padding: 10px;
       overflow-x: auto;
       border-radius: 5px;
+      margin: 0;
+    }
+    .copy-button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-bottom: 10px;
+      display: block;
+      margin-left: auto;
+    }
+    .copy-button:hover {
+      background: #45a049;
     }
   </style>
 </head>
 <body>
-
-
-
   <div class="program">
-    <h2>1.Merge Sort for Random, Ordered, and Reversed Input with Time and Space Complexity</h2>
+    <h2>1. Merge Sort for Random, Ordered, and Reversed Input with Time and Space Complexity</h2>
+    <button class="copy-button" onclick="copyCode(this)">Copy</button>
     <pre>
- import random
+import random
 import time
 
 def merge(arr, left, mid, right):
@@ -94,7 +107,8 @@ if __name__ == "__main__":
   </div>
 
   <div class="program">
-    <h2>2.Tower of Hanoi</h2>
+    <h2>2. Tower of Hanoi</h2>
+    <button class="copy-button" onclick="copyCode(this)">Copy</button>
     <pre>
 def tower_of_hanoi(n, source, auxiliary, destination):
     if n == 1:
@@ -115,7 +129,8 @@ if __name__ == "__main__":
   </div>
 
   <div class="program">
-    <h2>3.Quick Sort</h2>
+    <h2>3. Quick Sort</h2>
+    <button class="copy-button" onclick="copyCode(this)">Copy</button>
     <pre>
 import random
 import time
@@ -159,7 +174,8 @@ if __name__ == "__main__":
   </div>
 
   <div class="program">
-    <h2>4.Travelling Salesman Problem using Dynamic Programming</h2>
+    <h2>4. Travelling Salesman Problem using Dynamic Programming</h2>
+    <button class="copy-button" onclick="copyCode(this)">Copy</button>
     <pre>
 def tsp_dp(graph, n):
     dp = [[float('inf')] * n for _ in range(1 << n)]
@@ -181,11 +197,14 @@ if __name__ == "__main__":
     n = len(graph)
     print(f"Minimum TSP cost: {tsp_dp(graph, n)}")
 
+# Time Complexity: O(n^2 * 2^n)
+# Space Complexity: O(n * 2^n)
     </pre>
   </div>
 
   <div class="program">
-    <h2>5.Insertion Sort </h2>
+    <h2>5. Insertion Sort</h2>
+    <button class="copy-button" onclick="copyCode(this)">Copy</button>
     <pre>
 import random
 import time
@@ -223,6 +242,7 @@ if __name__ == "__main__":
 
   <div class="program">
     <h2>6. Knapsack Problem using Dynamic Programming</h2>
+    <button class="copy-button" onclick="copyCode(this)">Copy</button>
     <pre>
 def knapsack_dp(values, weights, W, n):
     dp = [[0 for _ in range(W + 1)] for _ in range(n + 1)]
@@ -247,7 +267,8 @@ if __name__ == "__main__":
   </div>
 
   <div class="program">
-    <h2>7.Binary search</h2>
+    <h2>7. Binary Search</h2>
+    <button class="copy-button" onclick="copyCode(this)">Copy</button>
     <pre>
 def binary_search(arr, target, left, right):
     if left > right:
@@ -272,7 +293,8 @@ if __name__ == "__main__":
   </div>
 
   <div class="program">
-    <h2>8.Floyd's Algorithm</h2>
+    <h2>8. Floyd's Algorithm</h2>
+    <button class="copy-button" onclick="copyCode(this)">Copy</button>
     <pre>
 def floyd_algorithm(graph, n):
     dist = [row[:] for row in graph]
@@ -298,7 +320,8 @@ if __name__ == "__main__":
   </div>
 
   <div class="program">
-    <h2>9.Brute Force Algorithm (Example: String Matching)</h2>
+    <h2>9. Brute Force Algorithm (Example: String Matching)</h2>
+    <button class="copy-button" onclick="copyCode(this)">Copy</button>
     <pre>
 def brute_force_string(text, pattern):
     n = len(text)
@@ -323,7 +346,8 @@ if __name__ == "__main__":
   </div>
 
   <div class="program">
-    <h2>10.Dijkstra's Algorithm</h2>
+    <h2>10. Dijkstra's Algorithm</h2>
+    <button class="copy-button" onclick="copyCode(this)">Copy</button>
     <pre>
 def dijkstra(graph, n, src):
     dist = [float('inf')] * n
@@ -350,6 +374,7 @@ if __name__ == "__main__":
 
   <div class="program">
     <h2>11. Prim's Algorithm for Minimum Spanning Tree</h2>
+    <button class="copy-button" onclick="copyCode(this)">Copy</button>
     <pre>
 def prim(graph, n):
     key = [float('inf')] * n
@@ -377,7 +402,8 @@ if __name__ == "__main__":
   </div>
 
   <div class="program">
-    <h2>12.Kruskal's Algorithm for Minimum Cost Spanning Tree</h2>
+    <h2>12. Kruskal's Algorithm for Minimum Cost Spanning Tree</h2>
+    <button class="copy-button" onclick="copyCode(this)">Copy</button>
     <pre>
 def find(parent, i):
     if parent[i] == i:
@@ -422,10 +448,11 @@ if __name__ == "__main__":
     </pre>
   </div>
 
-<div class="program">
-  <h2>13.Backtracking Algorithm (Example: N-Queens Problem)</h2>
-  <pre>
-    def is_safe(board, row, col, n):
+  <div class="program">
+    <h2>13. Backtracking Algorithm (Example: N-Queens Problem)</h2>
+    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+    <pre>
+def is_safe(board, row, col, n):
     for i in range(col):
         if board[row][i] == 1:
             return False
@@ -459,11 +486,14 @@ if __name__ == "__main__":
 
 # Time Complexity: O(n!)
 # Space Complexity: O(n^2)
-  </pre>
-</div>
-      <div class="program">
-        <h2>14.Compare Two Sorting Algorithms (Merge Sort and Quick Sort)</h2>
-<pre>import random
+    </pre>
+  </div>
+
+  <div class="program">
+    <h2>14. Compare Two Sorting Algorithms (Merge Sort and Quick Sort)</h2>
+    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+    <pre>
+import random
 import time
 
 def merge(arr, left, mid, right):
@@ -538,7 +568,53 @@ if __name__ == "__main__":
 # Merge Sort Time Complexity: O(n log n)
 # Merge Sort Space Complexity: O(n)
 # Quick Sort Time Complexity: O(n log n) average, O(n^2) worst case
-# Quick Sort Space Complexity: O(log n) average</pre>
-      </div>
-      </body>
+# Quick Sort Space Complexity: O(log n) average
+    </pre>
+  </div>
+
+  <script>
+    function copyCode(button) {
+      const pre = button.nextElementSibling;
+      const code = pre.textContent;
+      
+      // Try modern Clipboard API first
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(code).then(() => {
+          button.textContent = 'Copied!';
+          setTimeout(() => {
+            button.textContent = 'Copy';
+          }, 2000);
+        }).catch(err => {
+          console.error('Clipboard API failed: ', err);
+          // Fallback to execCommand
+          fallbackCopy(code, button);
+        });
+      } else {
+        // Fallback for non-secure contexts or unsupported browsers
+        fallbackCopy(code, button);
+      }
+    }
+
+    function fallbackCopy(code, button) {
+      const textarea = document.createElement('textarea');
+      textarea.value = code;
+      textarea.style.position = 'fixed'; // Avoid scrolling
+      textarea.style.opacity = '0'; // Hide element
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        button.textContent = 'Copied!';
+        setTimeout(() => {
+          button.textContent = 'Copy';
+        }, 2000);
+      } catch (err) {
+        console.error('Fallback copy failed: ', err);
+        alert('Failed to copy code. Please select and copy manually.');
+      }
+      document.body.removeChild(textarea);
+    }
+  </script>
+</body>
 </html>
